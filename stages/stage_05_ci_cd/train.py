@@ -1,7 +1,7 @@
 import argparse
+from importlib.metadata import version
 import json
 import logging
-from importlib.metadata import version
 from pathlib import Path
 
 import joblib
