@@ -1,0 +1,17 @@
+groups:
+  - name: heart-disease-api
+    rules:
+      - alert: HeartDiseaseApiDown
+        expr: up{job="heart-disease-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Heart disease API is unavailable
+      - alert: HeartDiseaseApiServerErrors
+        expr: sum(rate(api_requests_total{status=~"5.."}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.001) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: API server error rate exceeds five percent

@@ -1,0 +1,14 @@
+{
+  "model": "random_forest",
+  "selected_for_stage_02": true,
+  "selection_metric": "cv_roc_auc",
+  "best_cv_roc_auc": 0.9032808576286838,
+  "best_params": {
+    "classifier__max_depth": null,
+    "classifier__min_samples_leaf": 5
+  },
+  "test_accuracy": 0.8688524590163934,
+  "test_precision": 0.8125,
+  "test_recall": 0.9285714285714286,
+  "test_roc_auc": 0.9534632034632036
+}

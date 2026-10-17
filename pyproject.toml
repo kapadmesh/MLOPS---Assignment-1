@@ -1,0 +1,16 @@
+[tool.pytest.ini_options]
+testpaths = [
+	"stages/stage_03_experiment_tracking_mlflow/tests",
+	"stages/stage_04_model_packaging_reproducibility/tests",
+	"stages/stage_05_ci_cd/tests",
+	"stages/stage_06_model_containerization/tests",
+]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

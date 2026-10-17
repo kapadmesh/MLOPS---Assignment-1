@@ -1,0 +1,6 @@
+{
+  "selected_model": "random_forest",
+  "selection_metric": "best_cv_roc_auc",
+  "selection_value": 0.9032808576286838,
+  "note": "Stage 03 independently tracks both models and assigns the MLflow champion tag."
+}

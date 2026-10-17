@@ -1,0 +1,24 @@
+{
+  "rows": 303,
+  "columns": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal",
+    "target"
+  ],
+  "missing_values": 0,
+  "class_counts": {
+    "0": 164,
+    "1": 139
+  }
+}

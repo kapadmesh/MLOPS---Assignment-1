@@ -1,0 +1,13 @@
+{
+  "experiment_name": "heart-disease-classification",
+  "experiment_id": "1",
+  "run_id": "63de6af31bb34c98ba630cee7bba54ee",
+  "model": "random_forest",
+  "model_status": "champion",
+  "registered_model": "heart-disease-classifier",
+  "model_version": "14",
+  "model_alias": "champion",
+  "model_name_alias": "model-random-forest",
+  "selection_metric": "cv_roc_auc_mean",
+  "selection_value": 0.9032808576286838
+}

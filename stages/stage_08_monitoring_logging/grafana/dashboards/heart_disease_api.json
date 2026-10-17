@@ -1,0 +1,57 @@
+{
+  "uid": "heart-disease-api",
+  "title": "Stage 08 - Heart Disease API",
+  "schemaVersion": 40,
+  "version": 1,
+  "editable": false,
+  "refresh": "15s",
+  "time": {"from": "now-30m", "to": "now"},
+  "tags": ["mlops", "stage-08"],
+  "panels": [
+    {
+      "id": 1,
+      "title": "API Availability",
+      "type": "stat",
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "expr": "up{job=\"heart-disease-api\"}"}],
+      "fieldConfig": {"defaults": {"min": 0, "max": 1, "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}}, "overrides": []}
+    },
+    {
+      "id": 2,
+      "title": "Requests per Second",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 18, "x": 6, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "expr": "sum by (route, status) (rate(api_requests_total[5m]))", "legendFormat": "{{route}} {{status}}"}],
+      "fieldConfig": {"defaults": {"unit": "reqps", "min": 0}, "overrides": []}
+    },
+    {
+      "id": 3,
+      "title": "Prediction Latency p95",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "expr": "histogram_quantile(0.95, sum by (le) (rate(api_request_duration_seconds_bucket{route=\"/predict\"}[5m])))"}],
+      "fieldConfig": {"defaults": {"unit": "s", "min": 0}, "overrides": []}
+    },
+    {
+      "id": 4,
+      "title": "Predictions by Class per Second",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "expr": "sum by (prediction) (rate(model_predictions_total[5m]))", "legendFormat": "Class {{prediction}}"}],
+      "fieldConfig": {"defaults": {"min": 0}, "overrides": []}
+    },
+    {
+      "id": 5,
+      "title": "Server Error Percentage",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [{"refId": "A", "expr": "100 * sum(rate(api_requests_total{status=~\"5..\"}[5m])) / clamp_min(sum(rate(api_requests_total[5m])), 0.001)"}],
+      "fieldConfig": {"defaults": {"unit": "percent", "min": 0, "max": 100}, "overrides": []}
+    }
+  ]
+}

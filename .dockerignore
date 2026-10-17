@@ -1,0 +1,11 @@
+**
+!requirements-serving.txt
+!stages/
+!stages/__init__.py
+!stages/stage_05_ci_cd/
+!stages/stage_05_ci_cd/*.py
+!stages/stage_06_model_containerization/
+!stages/stage_06_model_containerization/*.py
+!models/
+!models/heart_disease_pipeline.joblib
+!models/model_metadata.json

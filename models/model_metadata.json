@@ -1,0 +1,43 @@
+{
+  "model_name": "random_forest",
+  "model_status": "champion",
+  "registered_model": "heart-disease-classifier",
+  "model_version": "12",
+  "model_alias": "champion",
+  "model_name_alias": "model-random-forest",
+  "final_model_alias": "final-champion",
+  "packaging_status": "final-champion",
+  "mlflow_run_id": "a082a57c59e74949a0a7282de3378e53",
+  "selection_metric": "cv_roc_auc_mean",
+  "selection_value": 0.9032808576286838,
+  "target_mapping": {
+    "0": "no disease",
+    "1": "disease present (original num 1-4)"
+  },
+  "features": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "categorical_features": [
+    "sex",
+    "cp",
+    "fbs",
+    "restecg",
+    "exang",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "warning": "Educational model only; not for diagnosis or clinical decision-making."
+}

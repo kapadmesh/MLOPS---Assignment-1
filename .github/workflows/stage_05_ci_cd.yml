@@ -1,0 +1,68 @@
+name: Stage 05 - CI and automated testing
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-test-train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: |
+            requirements-serving.txt
+            requirements-dev.txt
+      - name: Prepare reports
+        run: mkdir -p artifacts/stage_05/reports
+      - name: Install dependencies
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pip install -r requirements-dev.txt 2>&1 | tee artifacts/stage_05/reports/install.log
+      - name: Lint
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m ruff check stages 2>&1 | tee artifacts/stage_05/reports/lint.log
+      - name: Unit and API tests
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m pytest --junitxml=artifacts/stage_05/reports/junit.xml --cov=stages.stage_05_ci_cd --cov=stages.stage_06_model_containerization --cov-report=xml:artifacts/stage_05/reports/coverage.xml 2>&1 | tee artifacts/stage_05/reports/tests.log
+      - name: Train and verify exported model
+        shell: bash
+        run: |
+          set -o pipefail
+          python -m stages.stage_05_ci_cd.train 2>&1 | tee artifacts/stage_05/reports/training.log
+      - name: Build serving image
+        shell: bash
+        run: |
+          set -o pipefail
+          docker build -f stages/stage_06_model_containerization/Dockerfile -t heart-disease-api:ci . 2>&1 | tee artifacts/stage_05/reports/docker-build.log
+      - name: Smoke-test container endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'docker logs heart-disease-api-ci > artifacts/stage_05/reports/container.log 2>&1; docker rm -f heart-disease-api-ci' EXIT
+          docker run -d --name heart-disease-api-ci -p 127.0.0.1:8000:8000 heart-disease-api:ci
+          curl --fail --retry 15 --retry-delay 2 --retry-all-errors http://127.0.0.1:8000/ready
+          curl --fail -H 'Content-Type: application/json' --data @stages/stage_06_model_containerization/sample_request.json http://127.0.0.1:8000/predict > artifacts/stage_05/reports/container-prediction.json
+          python -c "import json; from pathlib import Path; result = json.loads(Path('artifacts/stage_05/reports/container-prediction.json').read_text()); assert result['prediction'] in (0, 1); assert 0 <= result['confidence'] <= 1; assert abs(sum(result['class_probabilities'].values()) - 1) < 1e-6"
+          curl --fail http://127.0.0.1:8000/metrics > artifacts/stage_05/reports/container-metrics.txt
+      - name: Save workflow reports and model artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-05-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/stage_05/
+          if-no-files-found: warn
+          retention-days: 14

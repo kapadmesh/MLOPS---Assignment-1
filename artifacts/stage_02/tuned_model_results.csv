@@ -1,0 +1,3 @@
+model,selected_for_stage_02,selection_metric,best_cv_roc_auc,best_params,test_accuracy,test_precision,test_recall,test_roc_auc
+random_forest,True,cv_roc_auc,0.9032808576286838,"{'classifier__max_depth': None, 'classifier__min_samples_leaf': 5}",0.8688524590163934,0.8125,0.9285714285714286,0.9534632034632036
+logistic_regression,False,cv_roc_auc,0.9031400966183576,"{'classifier__C': 0.1, 'classifier__solver': 'liblinear'}",0.8852459016393442,0.8387096774193549,0.9285714285714286,0.9664502164502164

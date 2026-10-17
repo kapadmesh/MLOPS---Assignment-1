@@ -1,0 +1,14 @@
+{
+  "model": "logistic_regression",
+  "selected_for_stage_02": false,
+  "selection_metric": "cv_roc_auc",
+  "best_cv_roc_auc": 0.9031400966183576,
+  "best_params": {
+    "classifier__C": 0.1,
+    "classifier__solver": "liblinear"
+  },
+  "test_accuracy": 0.8852459016393442,
+  "test_precision": 0.8387096774193549,
+  "test_recall": 0.9285714285714286,
+  "test_roc_auc": 0.9664502164502164
+}
