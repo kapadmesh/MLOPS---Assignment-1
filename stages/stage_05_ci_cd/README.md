@@ -2,7 +2,7 @@
 
 ## Run Later
 
-Install `requirements-dev.txt` using Python 3.13 as described in the root guide, then run:
+Install dependencies from `requirements.txt` using Python 3.13 as described in the root guide, then run:
 
 ```powershell
 .\stages\stage_05_ci_cd\run.ps1 -Python .\.venv\Scripts\python.exe
@@ -20,7 +20,7 @@ Tests cover feature ordering, missing/invalid inputs, binary target validation, 
 
 ## GitHub Actions
 
-Commit the project, including the cleaned dataset and stage-04 model/metadata, to a GitHub repository. The stage-05 workflow runs on pushes, pull requests, and manual dispatch. It installs the dedicated development requirements, lints, tests, trains, builds Docker, and smoke-tests `/ready`, `/predict`, and `/metrics`.
+Commit the project, including the cleaned dataset and stage-04 model/metadata, to a GitHub repository. The stage-05 workflow runs on pushes, pull requests, and manual dispatch. It installs the project dependencies from `requirements.txt`, lints, tests, trains, builds Docker, and smoke-tests `/ready`, `/predict`, and `/metrics`.
 
 `set -o pipefail` prevents log collection from masking failed commands. Artifacts are uploaded with `if: always()` under a unique run/attempt name, retained for 14 days. They include dependency/lint/test/training/build logs, JUnit XML, coverage XML, baseline metrics/model/metadata, and container verification output when those steps were reached. Container logs are captured and the test container is removed on exit.
 

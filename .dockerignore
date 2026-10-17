@@ -1,5 +1,5 @@
 **
-!requirements-serving.txt
+!requirements.txt
 !stages/
 !stages/__init__.py
 !stages/stage_05_ci_cd/

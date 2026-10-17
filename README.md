@@ -37,12 +37,12 @@ Use each linked stage guide for prerequisites, stage 06-08 commands, verificatio
 
 Commands in the stage guides are intended to be run later, from the project root in PowerShell. No packages, containers, cluster resources, or hosting are installed by adding these files.
 
-Use Python **3.13**, matching the existing artifact environment. `requirements.txt` contains the analysis/training dependencies. `requirements-serving.txt` contains the smaller API environment; `requirements-dev.txt` includes both environments plus test and lint tools, including dependencies for the MLflow tests. Stage 04 can rewrite the analysis requirements without removing the separate serving and development files. Direct dependencies are version-pinned; this is not a complete transitive lockfile.
+Use Python **3.13**, matching the existing artifact environment. `requirements.txt` is the single project dependency file and includes the analysis, training, serving, lint, test, and MLflow dependencies used across the project. Direct dependencies are version-pinned; this is not a complete transitive lockfile.
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements-dev.txt
+python -m pip install -r requirements.txt
 ```
 
 Reuse the existing virtual environment instead of recreating it when appropriate. Docker Desktop and Kubernetes/kubectl are separate later prerequisites.

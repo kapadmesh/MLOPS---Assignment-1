@@ -8,7 +8,7 @@
 
 ## Local Python Run Later
 
-Install `requirements-serving.txt` into Python 3.13, then:
+Install dependencies from `requirements.txt` into Python 3.13, then:
 
 ```powershell
 python -m uvicorn stages.stage_06_model_containerization.app:app --host 127.0.0.1 --port 8000 --workers 1 --no-access-log

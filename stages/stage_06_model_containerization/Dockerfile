@@ -7,8 +7,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     MODEL_METADATA_PATH=/app/models/model_metadata.json
 
 WORKDIR /app
-COPY requirements-serving.txt ./
-RUN python -m pip install --no-cache-dir -r requirements-serving.txt \
+COPY requirements.txt ./
+RUN python -m pip install --no-cache-dir -r requirements.txt \
     && groupadd --gid 10001 app \
     && useradd --uid 10001 --gid app --no-create-home app
 COPY stages/__init__.py ./stages/__init__.py
