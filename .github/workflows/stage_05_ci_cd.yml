@@ -31,7 +31,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          python -m ruff check stages 2>&1 | tee artifacts/stage_05/reports/lint.log
+          python -m ruff check --fix stages 2>&1 | tee artifacts/stage_05/reports/lint.log
       - name: Unit and API tests
         shell: bash
         run: |
