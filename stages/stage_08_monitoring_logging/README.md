@@ -15,6 +15,15 @@ After filling in the password:
 .\stages\stage_06_model_containerization\verify_endpoint.ps1
 ```
 
+On Rocky Linux, create the local environment file and start/verify the stack with:
+
+```bash
+cp stages/stage_08_monitoring_logging/.env.example stages/stage_08_monitoring_logging/.env
+# Edit .env and set a new nonempty GRAFANA_ADMIN_PASSWORD; do not commit it.
+bash stages/stage_08_monitoring_logging/run.sh Up
+bash stages/stage_06_model_containerization/verify_endpoint.sh
+```
+
 Open Prometheus at `http://localhost:9090` and Grafana at `http://localhost:3000`. Log into Grafana using the local `.env` credentials. The Prometheus datasource and **MLOps / Stage 08 - Heart Disease API** dashboard are provisioned automatically.
 
 This Compose stack monitors its own local API instance, not the stage-07 Kubernetes pods. Kubernetes pods expose the same `/metrics` endpoint and carry Prometheus scrape annotations for an existing cluster monitoring setup; those annotations alone do not install a scraper.
@@ -30,6 +39,17 @@ $Payload = Get-Content stages/stage_06_model_containerization/sample_request.jso
 }
 ```
 
+On Rocky Linux, generate the same requests with curl:
+
+```bash
+for _ in $(seq 1 100); do
+  curl --fail --silent --show-error \
+    -H 'Content-Type: application/json' \
+    --data-binary @stages/stage_06_model_containerization/sample_request.json \
+    http://localhost:8000/predict >/dev/null
+done
+```
+
 Allow at least two Prometheus scrapes before inspecting rate panels. The dashboard shows availability, requests by route/status, p95 prediction latency, prediction counts by class, and 5xx error percentage. A single burst will only affect a short part of the time window. No 5xx samples can appear as an empty error series rather than a measured zero.
 
 Alerts appear in Prometheus when the API is down or 5xx error rate exceeds five percent. No Alertmanager or external alert delivery is configured. These metrics monitor service behavior, not model quality, data drift, calibration, or clinical validity.
@@ -42,6 +62,8 @@ The API writes structured JSON request events to stdout/stderr with a generated 
 .\stages\stage_08_monitoring_logging\run.ps1 -Action Logs
 ```
 
+On Rocky Linux, use `bash stages/stage_08_monitoring_logging/run.sh Logs` to view API logs.
+
 The same request events can be retrieved from Kubernetes with `kubectl logs`. Grafana displays metrics only; centralized log storage is not included.
 
 ## Evidence and Cleanup
@@ -51,5 +73,7 @@ Capture a healthy Prometheus target, the populated Grafana dashboard, and reques
 ```powershell
 .\stages\stage_08_monitoring_logging\run.ps1 -Action Down
 ```
+
+On Rocky Linux, stop the stack with `bash stages/stage_08_monitoring_logging/run.sh Down`.
 
 Named volumes preserve metrics and Grafana state. Adding `--volumes` deletes them. A changed Grafana admin password in `.env` does not reset credentials in an already-initialized persistent Grafana database. All demo ports bind to localhost.

@@ -4,7 +4,7 @@ Educational only. Predictions and confidence are model scores, not calibrated cl
 
 ## Stage Structure
 
-Every stage is self-contained under `stages/`. Python stages use an adjacent `run.py` module as their entry point; stages without a Python entry point retain PowerShell scripts for Docker, Kubernetes, or CI operations. Stage-specific tests, manifests, container files, monitoring configuration, and helper scripts stay in the owning stage folder.
+Every stage is self-contained under `stages/`. Python stages use an adjacent `run.py` module as their entry point; stages without a Python entry point provide PowerShell and Bash scripts for Docker, Kubernetes, or CI operations. Stage-specific tests, manifests, container files, monitoring configuration, and helper scripts stay in the owning stage folder.
 
 | Stage | Folder | Guide |
 | --- | --- | --- |
@@ -29,6 +29,14 @@ Run commands from the project root. Run Python stages 01-04 as modules with the 
 .\.venv\Scripts\python.exe -m stages.stage_03_experiment_tracking_mlflow.run
 .\.venv\Scripts\python.exe -m stages.stage_04_model_packaging_reproducibility.run
 .\stages\stage_05_ci_cd\run.ps1 -Python .\.venv\Scripts\python.exe
+```
+
+On Rocky Linux, run stages 01-04 with `.venv/bin/python -m stages.<stage>.run` and use the matching `.sh` scripts for stages 05-08. For example:
+
+```bash
+.venv/bin/python -m stages.stage_01_data_acquisition_eda.run
+bash stages/stage_05_ci_cd/run.sh .venv/bin/python
+bash stages/stage_06_model_containerization/run.sh Up
 ```
 
 Use each linked stage guide for prerequisites, stage 06-08 commands, verification, and cleanup.

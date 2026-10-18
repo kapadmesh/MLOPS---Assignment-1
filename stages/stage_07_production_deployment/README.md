@@ -26,6 +26,18 @@ Use the reported external IP in `http://EXTERNAL-IP` and verify through the Load
 
 Replace `EXTERNAL-IP` with the actual value. Minikube tunnel may require user-managed elevated permissions.
 
+Rocky Linux equivalents:
+
+```bash
+minikube start
+minikube image load heart-disease-api:stage06
+bash stages/stage_07_production_deployment/run.sh minikube
+kubectl --context minikube -n heart-disease get service heart-disease-api
+bash stages/stage_07_production_deployment/verify_deployment.sh minikube http://EXTERNAL-IP
+```
+
+Replace `EXTERNAL-IP` with the actual service address.
+
 ## Docker Desktop Later
 
 Enable Docker Desktop Kubernetes and build the image using that Docker engine. The `IfNotPresent` pull policy allows the cluster to use the local image when available:
@@ -45,11 +57,20 @@ kubectl --context docker-desktop -n heart-disease port-forward service/heart-dis
 .\stages\stage_07_production_deployment\verify_deployment.ps1 -Context docker-desktop -BaseUrl http://localhost:8080
 ```
 
+On Rocky Linux, pass the Kubernetes context as the first argument and the optional base URL as the second:
+
+```bash
+bash stages/stage_07_production_deployment/run.sh docker-desktop
+kubectl --context docker-desktop -n heart-disease get service heart-disease-api
+kubectl --context docker-desktop -n heart-disease port-forward service/heart-disease-api 8080:80
+bash stages/stage_07_production_deployment/verify_deployment.sh docker-desktop http://localhost:8080
+```
+
 Port-forwarding tests the deployed API but does not prove LoadBalancer exposure. Capture external endpoint verification separately to satisfy that requirement.
 
 ## Public Cloud Later
 
-For GKE/EKS/AKS, authenticate kubectl to the chosen cluster, tag/push the stage-06 image to an accessible registry, and change `image` in `deployment.yaml` to that registry reference before applying. Supply registry pull credentials if necessary. Use `deploy.ps1 -Context YOUR-CLOUD-CONTEXT`, wait for the LoadBalancer address, and verify it. Prefer immutable version tags or image digests.
+For GKE/EKS/AKS, authenticate kubectl to the chosen cluster, tag/push the stage-06 image to an accessible registry, and change `image` in `deployment.yaml` to that registry reference before applying. Supply registry pull credentials if necessary. On PowerShell use `deploy.ps1 -Context YOUR-CLOUD-CONTEXT`; on Rocky Linux use `bash stages/stage_07_production_deployment/deploy.sh YOUR-CLOUD-CONTEXT`. Wait for the LoadBalancer address, and verify it. Prefer immutable version tags or image digests.
 
 Do not expose this educational API to untrusted users without adding TLS, authentication, network controls, and appropriate access restrictions. `/metrics` and `/docs` are also exposed by the demo service. Those production hardening measures and cloud provisioning are not implemented here.
 

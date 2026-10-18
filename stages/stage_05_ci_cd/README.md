@@ -10,6 +10,12 @@ Install dependencies from `requirements.txt` using Python 3.13 as described in t
 
 This runs Ruff, pytest with coverage/JUnit reports, and reproducible model training. Failures stop the script. Reports and logs go to `artifacts/stage_05/reports/`; training artifacts go to `artifacts/stage_05/training/`.
 
+On Rocky Linux, use the Bash equivalent (it accepts an optional Python executable; the default is `python3`):
+
+```bash
+bash stages/stage_05_ci_cd/run.sh .venv/bin/python
+```
+
 For training alone:
 
 ```powershell

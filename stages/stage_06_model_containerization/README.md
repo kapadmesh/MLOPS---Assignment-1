@@ -20,6 +20,12 @@ In another terminal:
 .\stages\stage_06_model_containerization\verify_endpoint.ps1
 ```
 
+On Rocky Linux, use the Bash verifier:
+
+```bash
+bash stages/stage_06_model_containerization/verify_endpoint.sh
+```
+
 ## Docker Run Later
 
 Install/start Docker Desktop in Linux-container mode. Use the repository root as the build context:
@@ -36,6 +42,15 @@ Verification stores the prediction response and metrics in `artifacts/stage_06/v
 
 ```powershell
 .\stages\stage_06_model_containerization\run.ps1 -Action Down
+```
+
+On Rocky Linux, use the Bash equivalents:
+
+```bash
+bash stages/stage_06_model_containerization/run.sh Up
+bash stages/stage_06_model_containerization/verify_endpoint.sh
+bash stages/stage_06_model_containerization/run.sh Logs
+bash stages/stage_06_model_containerization/run.sh Down
 ```
 
 Stop this stack before starting stage 08, which runs its own API on port 8000. Model and metadata are baked into the image; rebuild when either changes. `MODEL_PATH` and `MODEL_METADATA_PATH` can select alternate mounted trusted artifacts when running the Python service.
