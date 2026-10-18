@@ -4,7 +4,7 @@ Educational only. Predictions and confidence are model scores, not calibrated cl
 
 ## Stage Structure
 
-Every stage is self-contained under `stages/` and has the same primary entry point: `run.ps1`. Python stages use an adjacent `run.py`; stage-specific tests, manifests, container files, monitoring configuration, and helper scripts stay in the owning stage folder.
+Every stage is self-contained under `stages/`. Python stages use an adjacent `run.py` module as their entry point; stages without a Python entry point retain PowerShell scripts for Docker, Kubernetes, or CI operations. Stage-specific tests, manifests, container files, monitoring configuration, and helper scripts stay in the owning stage folder.
 
 | Stage | Folder | Guide |
 | --- | --- | --- |
@@ -21,13 +21,13 @@ Generated evidence uses matching `artifacts/stage_XX/` folders. Shared inputs re
 
 ## Run Pattern
 
-Run stage scripts from the project root. Stages 01-05 accept the selected Python executable; stages 06-08 use their documented Docker or Kubernetes parameters.
+Run commands from the project root. Run Python stages 01-04 as modules with the selected Python executable; stages 05-08 use their documented PowerShell, Docker, or Kubernetes commands.
 
 ```powershell
-.\stages\stage_01_data_acquisition_eda\run.ps1 -Python .\.venv\Scripts\python.exe
-.\stages\stage_02_feature_engineering_model_development\run.ps1 -Python .\.venv\Scripts\python.exe
-.\stages\stage_03_experiment_tracking_mlflow\run.ps1 -Python .\.venv\Scripts\python.exe
-.\stages\stage_04_model_packaging_reproducibility\run.ps1 -Python .\.venv\Scripts\python.exe
+.\.venv\Scripts\python.exe -m stages.stage_01_data_acquisition_eda.run
+.\.venv\Scripts\python.exe -m stages.stage_02_feature_engineering_model_development.run
+.\.venv\Scripts\python.exe -m stages.stage_03_experiment_tracking_mlflow.run
+.\.venv\Scripts\python.exe -m stages.stage_04_model_packaging_reproducibility.run
 .\stages\stage_05_ci_cd\run.ps1 -Python .\.venv\Scripts\python.exe
 ```
 

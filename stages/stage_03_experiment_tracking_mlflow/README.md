@@ -13,7 +13,7 @@ Loads both models' tuned parameters from stage 02, then tracks their preprocessi
 Aliases are model-registry pointers, not run tags. `model_name`, `model_status`, and selection tags describe runs and model versions. Stage 04 adds the separate `packaging_status` tag. Stage 03 leaves `final-champion` unchanged until stage 04 packages the new champion; a previous packaged version can therefore remain `final-champion` while a newer version is `champion`.
 
 ```powershell
-.\stages\stage_03_experiment_tracking_mlflow\run.ps1 -Python .\.venv\Scripts\python.exe
+.\.venv\Scripts\python.exe -m stages.stage_03_experiment_tracking_mlflow.run
 ```
 
 Run stages 01 and 02 first. Tracking metadata and the model registry are stored in `mlflow.db`, MLflow artifacts in `mlruns/`, the complete comparison in `artifacts/stage_03/mlflow_run_summary.csv`, and the downstream alias/version handoff in `artifacts/stage_03/champion_run.json`. Champion selection never uses hold-out metrics.
